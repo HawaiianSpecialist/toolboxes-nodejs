@@ -1,0 +1,27 @@
+{
+  "name": "toolbox-nodejs",
+  "version": "1.0.0",
+  "description": "Cool stuff",
+  "main": "app.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql": "^2.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PocketAce360/toolboxes-nodejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PocketAce360/toolboxes-nodejs/issues"
+  },
+  "homepage": "https://github.com/PocketAce360/toolboxes-nodejs#readme"
+}
