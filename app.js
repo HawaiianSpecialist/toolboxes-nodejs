@@ -43,13 +43,13 @@ app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 function add(query)
 {
   // Parse query
-  var sqlStatement = "INSERT INTO tools (name, size, manufacturer, description) VALUES ('" + query.name + "', '" + query.size + "', '" + query.manufacturer + "', '" + query.description + "')";
+  var sqlStatement = "INSERT INTO tools (name, size, manufacturer, description) VALUES ('" + escape(query.name) + "', '" + escape(query.size) + "', '" + escape(query.manufacturer) + "', '" + escape(query.description) + "')";
 
   connection.query(sqlStatement, function (err, rows, fields)
   {
     if (err) throw err
 
-    console.log('The solution is: ', rows[0])
+    console.log('Added ', rows)
   })
 
   console.log("finished");
