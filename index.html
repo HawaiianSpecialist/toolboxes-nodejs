@@ -24,25 +24,22 @@
 
   <!-- Add your site or application content here -->
   <form id="form" onsubmit="add()">
-    <input id="toolName" type="text" />
-    <input id="toolSize" type="text" />
-    <input id="toolManufacturer" type="text" />
-    <input id="toolDescription" type="text" />
+    Name: <input id="name" type="text" />    Size: <input id="size" type="text" />    Manufacturer: <input id="manufacturer" type="text" />    Description: <input id="description" type="text" />
     <button type="submit">Submit</button>
   </form>
 
   <script>
 
-    //document.getElementById("form").addEventListener('submit', function (event) { event.preventDefault(); });
+    document.getElementById("form").addEventListener('submit', function (event) { event.preventDefault(); });
 
     function add()
     {
-      var toolName = document.getElementById("toolName").value;
-      var toolSize = document.getElementById("toolSize").value;
-      var toolManufacturer = document.getElementById("toolManufacturer").value;
-      var toolDescription = document.getElementById("toolDescription").value;
+      var name = document.getElementById("name").value;
+      var size = document.getElementById("size").value;
+      var manufacturer = document.getElementById("manufacturer").value;
+      var description = document.getElementById("description").value;
 
-      var data = "/add?toolName=" + toolName + "&toolSize=" + toolSize + "&toolManufacturer=" + toolManufacturer + "&toolDescription=" + toolDescription;
+      var data = "/add?name=" + name + "&size=" + size + "&manufacturer=" + manufacturer + "&description=" + description;
 
       console.log(data);
       window.location.href = data;
