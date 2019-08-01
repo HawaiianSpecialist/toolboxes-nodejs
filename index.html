@@ -23,30 +23,99 @@
   <![endif]-->
 
   <!-- Add your site or application content here -->
-  <form id="form" onsubmit="add()">
-    Name: <input id="name" type="text" />    Size: <input id="size" type="text" />    Manufacturer: <input id="manufacturer" type="text" />    Description: <input id="description" type="text" />
-    <button type="submit">Submit</button>
-  </form>
+  <table id="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Size</th>
+        <th>Manufactuer</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
 
   <script>
 
-    document.getElementById("form").addEventListener('submit', function (event) { event.preventDefault(); });
+    var host = "http://localhost:3000"; 
 
-    function add()
+    function renderer(data)
     {
-      var name = document.getElementById("name").value;
-      var size = document.getElementById("size").value;
-      var manufacturer = document.getElementById("manufacturer").value;
-      var description = document.getElementById("description").value;
+      if (data)
+      {
+        //TODO: first need to delete all the table's rows
+        //document.getElementById("myTable").deleteRow(0);
 
-      var data = "/add?name=" + name + "&size=" + size + "&manufacturer=" + manufacturer + "&description=" + description;
+        //next update table with data sent back.
+        for (let i = 0; i < data.length; i++)
+        {
+          $('#table tbody').append("<tr><td contenteditable='false'>" + data[i].id +
+            "</td><td contenteditable='true'>" + data[i].name +
+            "</td><td contenteditable='true'>" + data[i].size +
+            "</td><td contenteditable='true'>" + data[i].manufacturer +
+            "</td><td contenteditable='true'>" + data[i].description +
+            "</td><td contenteditable='false'><button onclick='updateRecord(" + i + ")'>Update</button><button onclick='deleteRecord(" + i + ")'>Delete</button></td></tr>");
+        }
 
-      console.log(data);
-      window.location.href = data;
-
+        // Add blank record to be able to add new tool
+      }
     }
 
+    function retrieveRecord()
+    {
+      $.ajax({
+        type: 'GET',
+        url: host + '/retrieve',
+        dataType: "json", //to parse string into JSON object,
+        success: renderer(data),
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+          alert('error: ' + textStatus + ': ' + errorThrown);
+        }
+      });
+    }
+
+    function updateRecord(row)
+    {
+      var url = host + "/update?";
+      cells = $("#table").find("tbody tr").eq(row).children();
+      url += "id=" + cells[0] + "&name=" + cells[1] + "&size=" + cells[2] + "&manufacturer=" + cells[3] + "&description=" + cells[4];
+      $.ajax({
+        type: 'GET',
+        url: url,
+        dataType: "json", //to parse string into JSON object,
+        success: renderer(data),
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+          alert('error: ' + textStatus + ': ' + errorThrown);
+        }
+      });
+    }
+
+    function deleteRecord(row)
+    {
+      var url = host + "/delete?";
+      cells = $("#table").find("tbody tr").eq(row).children();
+      url += "id=" + cells[0];
+      $.ajax({
+        type: 'GET',
+        url: url,
+        dataType: "json", //to parse string into JSON object,
+        success: renderer(data),
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+          alert('error: ' + textStatus + ': ' + errorThrown);
+        }
+      });
+    }
+
+    retrieveRecord();
+
   </script>
+
+
 
   <script src="js/vendor/modernizr-3.7.1.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"

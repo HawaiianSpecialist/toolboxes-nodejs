@@ -31,14 +31,37 @@ connection.connect(function (err)
 // Routes
 app.get('/', (req, res) => res.sendfile('index.html'))
 
-app.get('/add', function (req, res)
+app.get('/retrieve', function (req, res)
 {
-  add(req.query);
-  console.log(req.query);
+  var sqlStatement = "SELECT * FROM tools";
+
+  connection.query(sqlStatement, function (err, rows, fields)
+  {
+    if (err) throw err
+
+    console.log('Retrieved all records: ', rows)
+
+    res.json(rows);
+
+  })
+
+
+});
+
+app.get('/update', function (req, res)
+{
+
+});
+
+app.get('/delete', function (req, res)
+{
+
 });
 
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+
+
+app.listen(port, () => console.log('Listening on port ${port}'));
 
 function add(query)
 {
@@ -55,18 +78,28 @@ function add(query)
   console.log("finished");
 }
 
-function getTools()
+function retrieveRecord()
 {
   var statement = "";
 
-  connection.query(statement, function(err, rows, fields)
+  connection.query(statement, function (err, rows, fields)
   {
-    if(err) throw err
+    if (err) throw err
 
     console.log(rows);
 
     return rows;
   });
+}
+
+function updateRecord()
+{
+
+}
+
+function deleteRecord()
+{
+
 }
 
 // For testing purposes
