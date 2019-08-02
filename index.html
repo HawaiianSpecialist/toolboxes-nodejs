@@ -37,16 +37,36 @@
     </tbody>
   </table>
 
+  <script src="js/vendor/modernizr-3.7.1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
+
   <script>
 
-    var host = "http://localhost:3000"; 
+    var host = "http://localhost:3000";
 
     function renderer(data)
     {
       if (data)
       {
         //TODO: first need to delete all the table's rows
-        //document.getElementById("myTable").deleteRow(0);
+        // var rows = document.getElementById("table").getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
+
+        // for(var i = 0; i<rows; i++)
+        // {
+        //  document.getElementById("table").deleteRow(i);
+        // }
+        var Parent = document.getElementById("table").getElementsByTagName("tbody")[0];
+        while (Parent.hasChildNodes())
+        {
+          Parent.removeChild(Parent.firstChild);
+        }
+
+
+        //document.getElementById("Table").deleteRow(0);
 
         //next update table with data sent back.
         for (let i = 0; i < data.length; i++)
@@ -69,7 +89,10 @@
         type: 'GET',
         url: host + '/retrieve',
         dataType: "json", //to parse string into JSON object,
-        success: renderer(data),
+        success: function (data)
+        {
+          renderer(data);
+        },
         error: function (jqXHR, textStatus, errorThrown)
         {
           alert('error: ' + textStatus + ': ' + errorThrown);
@@ -81,12 +104,15 @@
     {
       var url = host + "/update?";
       cells = $("#table").find("tbody tr").eq(row).children();
-      url += "id=" + cells[0] + "&name=" + cells[1] + "&size=" + cells[2] + "&manufacturer=" + cells[3] + "&description=" + cells[4];
+      url += "id=" + cells[0].textContent + "&name=" + cells[1].textContent + "&size=" + cells[2].textContent + "&manufacturer=" + cells[3].textContent + "&description=" + cells[4].textContent;
       $.ajax({
         type: 'GET',
         url: url,
         dataType: "json", //to parse string into JSON object,
-        success: renderer(data),
+        success: function (data)
+        {
+          renderer(data);
+        },
         error: function (jqXHR, textStatus, errorThrown)
         {
           alert('error: ' + textStatus + ': ' + errorThrown);
@@ -98,12 +124,15 @@
     {
       var url = host + "/delete?";
       cells = $("#table").find("tbody tr").eq(row).children();
-      url += "id=" + cells[0];
+      url += "id=" + cells[0].textContent;
       $.ajax({
         type: 'GET',
         url: url,
         dataType: "json", //to parse string into JSON object,
-        success: renderer(data),
+        success: function (data)
+        {
+          renderer(data);
+        },
         error: function (jqXHR, textStatus, errorThrown)
         {
           alert('error: ' + textStatus + ': ' + errorThrown);
@@ -115,14 +144,6 @@
 
   </script>
 
-
-
-  <script src="js/vendor/modernizr-3.7.1.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
-  <script src="js/plugins.js"></script>
-  <script src="js/main.js"></script>
 
   <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
   <script>

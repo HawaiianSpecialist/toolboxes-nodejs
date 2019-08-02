@@ -44,22 +44,58 @@ app.get('/retrieve', function (req, res)
     res.json(rows);
 
   })
-
-
 });
 
 app.get('/update', function (req, res)
-{
+{  
+  var sqlStatement = "UPDATE tools SET name='" + escape(req.query.name) + "', size='" + escape(req.query.size) + "', manufacturer='" + escape(req.query.manufacturer) + "', description='" + escape(req.query.description) + "' WHERE id='" + req.query.id + "';";
+  console.log(sqlStatement);
+  console.log("-------------" + req.query);
 
+  connection.query(sqlStatement, function (err, rows, fields)
+  {
+    if (err) throw err
+
+    console.log('Retrieved all records: ', rows)
+
+  });
+
+  sqlStatement = "SELECT * FROM tools";
+
+  connection.query(sqlStatement, function (err, rows, fields)
+  {
+    if (err) throw err
+
+    console.log('Retrieved all records: ', rows)
+
+    res.json(rows);
+  });
 });
 
 app.get('/delete', function (req, res)
 {
+  var sqlStatement = "DELETE FROM tools WHERE id='" + req.query.id + "';";
+
+  connection.query(sqlStatement, function (err, rows, fields)
+  {
+    if (err) throw err
+
+    console.log('Deleted record: ', rows)
+  })
+
+  sqlStatement = "SELECT * FROM tools";
+
+  connection.query(sqlStatement, function (err, rows, fields)
+  {
+    if (err) throw err
+
+    console.log('Retrieved all records: ', rows)
+
+    res.json(rows);
+
+  })
 
 });
-
-
-
 
 app.listen(port, () => console.log('Listening on port ${port}'));
 
