@@ -65,22 +65,47 @@
           Parent.removeChild(Parent.firstChild);
         }
 
-
-        //document.getElementById("Table").deleteRow(0);
+        console.log("sdfsdfsdfsdfsdfdsfLength: " + data.length);
 
         //next update table with data sent back.
         for (let i = 0; i < data.length; i++)
         {
-          $('#table tbody').append("<tr><td contenteditable='false'>" + data[i].id +
-            "</td><td contenteditable='true'>" + data[i].name +
-            "</td><td contenteditable='true'>" + data[i].size +
-            "</td><td contenteditable='true'>" + data[i].manufacturer +
-            "</td><td contenteditable='true'>" + data[i].description +
-            "</td><td contenteditable='false'><button onclick='updateRecord(" + i + ")'>Update</button><button onclick='deleteRecord(" + i + ")'>Delete</button></td></tr>");
+          $('#table tbody').append("<tr><td contenteditable='false'>" + data[i].id + "</td>" +
+            "<td contenteditable='true'>" + data[i].name + "</td>" +
+            "<td contenteditable='true'>" + data[i].size + "</td>" +
+            "<td contenteditable='true'>" + data[i].manufacturer + "</td>" +
+            "<td contenteditable='true'>" + data[i].description + "</td>" +
+            "<td contenteditable='false'><button onclick='updateRecord(" + i + ")'>Update</button>" +
+            "<button onclick='deleteRecord(" + i + ")'>Delete</button></td></tr>");       
         }
-
-        // Add blank record to be able to add new tool
+        
+        $('#table tbody').append("<tr><td contenteditable='false'>New</td>" +
+              "<td contenteditable='true'></td>" +
+              "<td contenteditable='true'></td>" +
+              "<td contenteditable='true'></td>" +
+              "<td contenteditable='true'></td>" +
+              "<td contenteditable='false'><button onclick='addRecord(" + data.length + ")'>Add</button></td></td>");
       }
+    }
+
+    function addRecord(row)
+    {
+      var url = host + "/create?";
+      cells = $("#table").find("tbody tr").eq(row).children();
+      url += "id=" + cells[0].textContent + "&name=" + cells[1].textContent + "&size=" + cells[2].textContent + "&manufacturer=" + cells[3].textContent + "&description=" + cells[4].textContent;
+      $.ajax({
+        type: 'GET',
+        url: url,
+        dataType: "json", //to parse string into JSON object,
+        success: function (data)
+        {
+          renderer(data);
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+          alert('error: ' + textStatus + ': ' + errorThrown);
+        }
+      });
     }
 
     function retrieveRecord()

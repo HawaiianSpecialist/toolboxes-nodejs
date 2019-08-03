@@ -31,9 +31,18 @@ connection.connect(function (err)
 // Routes
 app.get('/', (req, res) => res.sendfile('index.html'))
 
-app.get('/retrieve', function (req, res)
+app.get('/create', function(req,res)
 {
-  var sqlStatement = "SELECT * FROM tools";
+  var sqlStatement = "INSERT INTO tools (name, size, manufacturer, description) VALUES ('" + escape(req.query.name) + "','" + escape(req.query.size) + "','" + escape(req.query.manufacturer) + "','" + escape(req.query.description) + "');";
+
+  connection.query(sqlStatement, function(err,rows,fields)
+  {
+    if(err) throw err
+
+    console.log('Created record: ', rows); 
+  });
+
+  sqlStatement = "SELECT * FROM tools";
 
   connection.query(sqlStatement, function (err, rows, fields)
   {
@@ -42,8 +51,23 @@ app.get('/retrieve', function (req, res)
     console.log('Retrieved all records: ', rows)
 
     res.json(rows);
+  });
+  
+});
 
-  })
+app.get('/retrieve', function (req, res)
+{
+  var sqlStatement = "SELECT * FROM tools";
+
+  connection.query(sqlStatement, function (err, rows, fields)
+  {
+    if (err) throw err
+
+    console.log('Retrieved all records: ', rows);
+
+    res.json(rows);
+
+  });
 });
 
 app.get('/update', function (req, res)
