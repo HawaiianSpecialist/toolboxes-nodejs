@@ -1,5 +1,5 @@
 // Turn off for production
-var debug = false;
+var debug = true;
 
 const express = require('express')
 const app = express()
@@ -26,85 +26,69 @@ connection.connect(function (err)
   }
 });
 
+app.listen(port, () => console.log('Listening on port: ' + port));
+
+// Paths
+var path = require('path');
+app.use(express.static(path.join(__dirname, '/public')));
 
 
 // Routes
-app.get('/', (req, res) => res.sendfile('index.html'))
+app.get('/', (req, res) => res.sendfile('index.html'));
 
-app.get('/create', function(req,res)
+app.get('/create', function (req, res)
 {
   var sqlStatement = "INSERT INTO tools (name, size, manufacturer, description) VALUES ('" + encodeURI(req.query.name) + "','" + encodeURI(req.query.size) + "','" + encodeURI(req.query.manufacturer) + "','" + encodeURI(req.query.description) + "');";
 
-  connection.query(sqlStatement, function(err,rows,fields)
-  {
-    if(err) throw err
+  executeQuery(sqlStatement);
 
-    console.log('Created record: ', rows); 
-  });
-
-  sqlStatement = "SELECT * FROM tools";
-
-  connection.query(sqlStatement, function (err, rows, fields)
-  {
-    if (err) throw err
-
-    console.log('Retrieved all records: ', rows)
-
-    res.json(rows);
-  });
-
+  refreshPage(res);
 });
 
 app.get('/retrieve', function (req, res)
 {
   var sqlStatement = "SELECT * FROM tools";
 
-  connection.query(sqlStatement, function (err, rows, fields)
-  {
-    if (err) throw err
+  executeQuery(sqlStatement);
 
-    console.log('Retrieved all records: ', rows);
-
-    res.json(rows);
-
-  });
+  refreshPage(res);
 });
 
 app.get('/update', function (req, res)
-{  
+{
   var sqlStatement = "UPDATE tools SET name='" + encodeURI(req.query.name) + "', size='" + encodeURI(req.query.size) + "', manufacturer='" + encodeURI(req.query.manufacturer) + "', description='" + encodeURI(req.query.description) + "' WHERE id='" + req.query.id + "';";
-  
-  connection.query(sqlStatement, function (err, rows, fields)
-  {
-    if (err) throw err
 
-    console.log('Retrieved all records: ', rows)
+  executeQuery(sqlStatement);
 
-  });
-
-  sqlStatement = "SELECT * FROM tools";
-
-  connection.query(sqlStatement, function (err, rows, fields)
-  {
-    if (err) throw err
-
-    console.log('Retrieved all records: ', rows)
-
-    res.json(rows);
-  });
+  refreshPage(res);
 });
 
 app.get('/delete', function (req, res)
 {
   var sqlStatement = "DELETE FROM tools WHERE id='" + req.query.id + "';";
 
+  executeQuery(sqlStatement);
+
+  refreshPage(res);
+});
+
+function executeQuery(sqlStatement)
+{
   connection.query(sqlStatement, function (err, rows, fields)
   {
-    if (err) throw err
+    if (err)
+    {
+      throw err
+    }
+    else
+    {
+      console.log('Executed: ', rows);
+    }
+  });
+}
 
-    console.log('Deleted record: ', rows)
-  })
-
+function refreshPage(res)
+{
   sqlStatement = "SELECT * FROM tools";
 
   connection.query(sqlStatement, function (err, rows, fields)
@@ -114,50 +98,7 @@ app.get('/delete', function (req, res)
     console.log('Retrieved all records: ', rows)
 
     res.json(rows);
-
-  })
-
-});
-
-app.listen(port, () => console.log('Listening on port ${port}'));
-
-function add(query)
-{
-  // Parse query
-  var sqlStatement = "INSERT INTO tools (name, size, manufacturer, description) VALUES ('" + encodeURI(query.name) + "', '" + encodeURI(query.size) + "', '" + encodeURI(query.manufacturer) + "', '" + encodeURI(query.description) + "')";
-
-  connection.query(sqlStatement, function (err, rows, fields)
-  {
-    if (err) throw err
-
-    console.log('Added ', rows)
-  })
-
-  console.log("finished");
-}
-
-function retrieveRecord()
-{
-  var statement = "";
-
-  connection.query(statement, function (err, rows, fields)
-  {
-    if (err) throw err
-
-    console.log(rows);
-
-    return rows;
   });
-}
-
-function updateRecord()
-{
-
-}
-
-function deleteRecord()
-{
-
 }
 
 // For testing purposes
