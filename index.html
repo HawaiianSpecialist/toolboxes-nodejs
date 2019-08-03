@@ -65,20 +65,18 @@
           Parent.removeChild(Parent.firstChild);
         }
 
-        console.log("sdfsdfsdfsdfsdfdsfLength: " + data.length);
-
         //next update table with data sent back.
         for (let i = 0; i < data.length; i++)
         {
-          $('#table tbody').append("<tr><td contenteditable='false'>" + data[i].id + "</td>" +
-            "<td contenteditable='true'>" + data[i].name + "</td>" +
-            "<td contenteditable='true'>" + data[i].size + "</td>" +
-            "<td contenteditable='true'>" + data[i].manufacturer + "</td>" +
-            "<td contenteditable='true'>" + data[i].description + "</td>" +
+          $('#table tbody').append("<tr><td contenteditable='false'>" + decodeURI(data[i].id) + "</td>" +
+            "<td contenteditable='true'>" + decodeURI(data[i].name) + "</td>" +
+            "<td contenteditable='true'>" + decodeURI(data[i].size) + "</td>" +
+            "<td contenteditable='true'>" + decodeURI(data[i].manufacturer) + "</td>" +
+            "<td contenteditable='true'>" + decodeURI(data[i].description) + "</td>" +
             "<td contenteditable='false'><button onclick='updateRecord(" + i + ")'>Update</button>" +
             "<button onclick='deleteRecord(" + i + ")'>Delete</button></td></tr>");       
         }
-        
+
         $('#table tbody').append("<tr><td contenteditable='false'>New</td>" +
               "<td contenteditable='true'></td>" +
               "<td contenteditable='true'></td>" +
@@ -92,7 +90,7 @@
     {
       var url = host + "/create?";
       cells = $("#table").find("tbody tr").eq(row).children();
-      url += "id=" + cells[0].textContent + "&name=" + cells[1].textContent + "&size=" + cells[2].textContent + "&manufacturer=" + cells[3].textContent + "&description=" + cells[4].textContent;
+      url += "id=" + encodeURI(cells[0].textContent) + "&name=" + encodeURI(cells[1].textContent) + "&size=" + encodeURI(cells[2].textContent) + "&manufacturer=" + encodeURI(cells[3].textContent) + "&description=" + encodeURI(cells[4].textContent);
       $.ajax({
         type: 'GET',
         url: url,
@@ -129,7 +127,7 @@
     {
       var url = host + "/update?";
       cells = $("#table").find("tbody tr").eq(row).children();
-      url += "id=" + cells[0].textContent + "&name=" + cells[1].textContent + "&size=" + cells[2].textContent + "&manufacturer=" + cells[3].textContent + "&description=" + cells[4].textContent;
+      url += "id=" + encodeURI(cells[0].textContent) + "&name=" + encodeURI(cells[1].textContent) + "&size=" + encodeURI(cells[2].textContent) + "&manufacturer=" + encodeURI(cells[3].textContent) + "&description=" + encodeURI(cells[4].textContent);
       $.ajax({
         type: 'GET',
         url: url,
@@ -149,7 +147,7 @@
     {
       var url = host + "/delete?";
       cells = $("#table").find("tbody tr").eq(row).children();
-      url += "id=" + cells[0].textContent;
+      url += "id=" + encodeURI(cells[0].textContent);
       $.ajax({
         type: 'GET',
         url: url,

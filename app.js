@@ -1,5 +1,5 @@
 // Turn off for production
-var debug = true;
+var debug = false;
 
 const express = require('express')
 const app = express()
@@ -33,7 +33,7 @@ app.get('/', (req, res) => res.sendfile('index.html'))
 
 app.get('/create', function(req,res)
 {
-  var sqlStatement = "INSERT INTO tools (name, size, manufacturer, description) VALUES ('" + escape(req.query.name) + "','" + escape(req.query.size) + "','" + escape(req.query.manufacturer) + "','" + escape(req.query.description) + "');";
+  var sqlStatement = "INSERT INTO tools (name, size, manufacturer, description) VALUES ('" + encodeURI(req.query.name) + "','" + encodeURI(req.query.size) + "','" + encodeURI(req.query.manufacturer) + "','" + encodeURI(req.query.description) + "');";
 
   connection.query(sqlStatement, function(err,rows,fields)
   {
@@ -52,7 +52,7 @@ app.get('/create', function(req,res)
 
     res.json(rows);
   });
-  
+
 });
 
 app.get('/retrieve', function (req, res)
@@ -72,10 +72,8 @@ app.get('/retrieve', function (req, res)
 
 app.get('/update', function (req, res)
 {  
-  var sqlStatement = "UPDATE tools SET name='" + escape(req.query.name) + "', size='" + escape(req.query.size) + "', manufacturer='" + escape(req.query.manufacturer) + "', description='" + escape(req.query.description) + "' WHERE id='" + req.query.id + "';";
-  console.log(sqlStatement);
-  console.log("-------------" + req.query);
-
+  var sqlStatement = "UPDATE tools SET name='" + encodeURI(req.query.name) + "', size='" + encodeURI(req.query.size) + "', manufacturer='" + encodeURI(req.query.manufacturer) + "', description='" + encodeURI(req.query.description) + "' WHERE id='" + req.query.id + "';";
+  
   connection.query(sqlStatement, function (err, rows, fields)
   {
     if (err) throw err
@@ -126,7 +124,7 @@ app.listen(port, () => console.log('Listening on port ${port}'));
 function add(query)
 {
   // Parse query
-  var sqlStatement = "INSERT INTO tools (name, size, manufacturer, description) VALUES ('" + escape(query.name) + "', '" + escape(query.size) + "', '" + escape(query.manufacturer) + "', '" + escape(query.description) + "')";
+  var sqlStatement = "INSERT INTO tools (name, size, manufacturer, description) VALUES ('" + encodeURI(query.name) + "', '" + encodeURI(query.size) + "', '" + encodeURI(query.manufacturer) + "', '" + encodeURI(query.description) + "')";
 
   connection.query(sqlStatement, function (err, rows, fields)
   {
