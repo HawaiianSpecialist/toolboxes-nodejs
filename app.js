@@ -1,9 +1,10 @@
 // Turn off for production
 var debug = true;
+var url = 'http://localhost:3000';
 
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require('express');
+const app = express();
+const port = 3000;
 
 var mysql = require('mysql');
 
@@ -104,7 +105,6 @@ function refreshPage(res)
 // For testing purposes
 if (debug)
 {
-  var url = 'http://localhost:3000';
   var start = (process.platform == 'darwin' ? 'open' : process.platform == 'win32' ? 'start' : 'xdg-open');
   require('child_process').exec(start + ' ' + url);
 }
