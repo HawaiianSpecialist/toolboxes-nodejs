@@ -39,7 +39,7 @@ app.get('/', (req, res) => res.sendfile('index.html'));
 
 app.get('/create', function (req, res)
 {
-  var sqlStatement = "INSERT INTO tools (name, size, manufacturer, description) VALUES ('" + encodeURI(req.query.name) + "','" + encodeURI(req.query.size) + "','" + encodeURI(req.query.manufacturer) + "','" + encodeURI(req.query.description) + "');";
+  var sqlStatement = "INSERT INTO tools (image, name, size, manufacturer, description) VALUES ('" + encodeURI(req.query.image) + "', '" + encodeURI(req.query.name) + "','" + encodeURI(req.query.size) + "','" + encodeURI(req.query.manufacturer) + "','" + encodeURI(req.query.description) + "');";
 
   executeQuery(sqlStatement);
 
@@ -57,7 +57,7 @@ app.get('/retrieve', function (req, res)
 
 app.get('/update', function (req, res)
 {
-  var sqlStatement = "UPDATE tools SET name='" + encodeURI(req.query.name) + "', size='" + encodeURI(req.query.size) + "', manufacturer='" + encodeURI(req.query.manufacturer) + "', description='" + encodeURI(req.query.description) + "' WHERE id='" + req.query.id + "';";
+  var sqlStatement = "UPDATE tools SET image='" + encodeURI(req.query.image) + "', name='" + encodeURI(req.query.name) + "', size='" + encodeURI(req.query.size) + "', manufacturer='" + encodeURI(req.query.manufacturer) + "', description='" + encodeURI(req.query.description) + "' WHERE id='" + req.query.id + "';";
 
   executeQuery(sqlStatement);
 
